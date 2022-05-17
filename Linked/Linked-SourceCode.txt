@@ -1,0 +1,162 @@
+
+#include <iostream>
+
+using namespace std;
+using std::string;
+
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+struct Node* head = NULL;
+struct Node* last = NULL;
+
+void isEmpty() {
+    string res = head == NULL ? "yes \n" : "no \n";
+    cout << res << "\n";
+}
+
+void getSize() {
+    int length = 0;
+    struct Node* current = (struct Node*)malloc(sizeof(struct Node));
+
+    for (current = head; current != NULL; current = current->next) {
+        length++;
+    }
+
+    cout << length << "\n\n";
+}
+
+void insertFirst(int newdata) {
+    struct Node* newNode;
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = newdata;
+    newNode->next = head;
+    head = newNode;
+}
+
+void insertLast(int newdata) {
+    struct Node* newNode;
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = newdata;
+    newNode->next = NULL;
+
+    struct Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+void removeFirst(){
+    head = head->next;
+}
+
+void removeLast() {
+    struct Node* temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = NULL;
+}
+
+void displayList() {
+    struct Node* ptr;
+    ptr = head;
+    while (ptr != NULL) {
+        cout << ptr->data << " ";
+        ptr = ptr->next;
+    }
+}
+
+void traverseList(int select) {
+    int num, res;
+    string str;
+    cout << "Input Number : ";
+    cin >> num;
+    cout << "Input Step : ";
+    cin >> str;
+    
+    if (num != str.size()) {
+        cout << "number and steps are not the same. \n";
+        select = 8;
+    }
+    else {
+        struct Node* ptr = head;
+        for (int i = 0; i < str.size(); i++) {
+            if (str[i] == 'L' && i != 0) {
+                ptr = ptr->prev;
+                res = ptr->data;
+            }
+            else if (str[i] == 'L' && i == 0) {
+            }
+            else {
+                ptr = ptr->next;
+                res = ptr->data;
+            }
+        }
+        cout << res;
+    }
+}
+
+int main()
+{
+    int select;
+    cout << "1. Operation isEmpty \n";
+    cout << "2. Operation getSize \n";
+    cout << "3. Operation insertFirst \n";
+    cout << "4. Operation insertLast \n";
+    cout << "5. Operation removeFirst \n";
+    cout << "6. Operation removeLast \n";
+    cout << "7. Operation displayList \n";
+    cout << "8. Operation traverseList \n";
+    cout << "9. Exit Program \n";
+    
+    while (true) {
+        cout << "Select item : ";
+        std::cin >> select;
+
+        switch (select) {
+        case 1: isEmpty();
+            break;
+        case 2: getSize();
+            break;
+        case 3: 
+            int firstdata;
+            cout << "Input new first node : ";
+            cin >> firstdata;
+            cout << "\n";
+            insertFirst(firstdata);
+            break;
+        case 4: 
+            int lastdata;
+            cout << "Input new last node : ";
+            cin >> lastdata;
+            cout << "\n";
+            insertLast(lastdata);
+            break;
+        case 5: removeFirst();
+            cout << "\n";
+            break;
+        case 6: removeLast();
+            cout << "\n";
+            break;
+        case 7: displayList();
+            cout << "\n\n";
+            break;
+        case 8: traverseList(select);
+            cout << "\n";
+            break;
+        case 9:
+            cout << "Exit";
+            return false;
+            break;
+        default:
+            return false;
+            break;
+        }
+    }
+
+    return 0;
+}

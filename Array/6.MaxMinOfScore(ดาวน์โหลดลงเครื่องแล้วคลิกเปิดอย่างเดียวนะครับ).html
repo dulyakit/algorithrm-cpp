@@ -1,0 +1,178 @@
+<!-- ************************************************
+    Author      : Dulyakit Phommachat 
+    Code        : 61172110078-6
+    Section     : CPE.61241
+    Lab No.     : 1
+    Course      : 04-061-212 Data Structures and Algorithms Laboratory
+    Due Date    : 22/04/2022
+    Instruction : A.Supattra Kerdmec
+    Description : 6.ให้เขียนโปรแกรมรับคะแนนของนักศึกษา n คน (คะแนนเต็ม 10 คะแนน)
+                    หลังจากนันให้แสดงผล โดยให้แสดงจํานวน * ออกมาตามจํานวนคะแนน
+                    หลังจากนั้นให้บอกว่าคนใดได้คะแนนมากสุดและคนใดได้คะแนนน้อยสุด
+***************************************************** -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab1</title>
+
+    <!-- imperative bootstrap ใช้แสดงผล -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap" rel="stylesheet">
+    <!-- imperative bootstrap ใช้แสดงผล-->
+
+    <!-- imperative javascript ใช้เขียนโปรแกรม-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- imperative javascript ใช้เขียนโปรแกรม-->
+
+</head>
+<style>
+    * {
+        font-family: 'Prompt', sans-serif;
+    }
+
+    .title {
+        padding: 10px;
+        background-color: antiquewhite;
+    }
+</style>
+
+<body>
+    <div id="section-code" class="container">
+        <div class="mt-3 ">
+            <h5 class="title"> 6. ให้เขียนโปรแกรมรับคะแนนของนักศึกษา n คน (คะแนนเต็ม 10 คะแนน)
+                หลังจากนันให้แสดงผล โดยให้แสดงจํานวน * ออกมาตามจํานวนคะแนน
+                หลังจากนั้นให้บอกว่าคนใดได้คะแนนมากสุดและคนใดได้คะแนนน้อยสุด
+            </h5>
+        </div>
+        <div class="row mt-5">
+            <div id="areaThis"></div>
+            <div id="areaList"></div>
+            <h5 id="title">โปรดป้อนจำนวนนักศึกษา จากนั้น Enter</h5>
+
+            <div class="col-md-12">
+                <input id="input" autocomplete="off" class="form-control" onkeyup="actionAlert()" type="text">
+            </div>
+
+            <div>
+                <button id="reset" class="btn btn-primary mt-3" style="display: none;"
+                    onclick="resetProgram()">เริ่มใหม่</button>
+            </div>
+
+            <div>
+                <div class="alert alert-danger mt-3" style="display: none;" id="alert" role="alert">
+                    โปรดป้อนตัวเลขจำนวนเต็ม
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    //Start Programing
+
+    //--- เข้าถึง element ผ่าน id
+    var title = document.getElementById('title')
+    var areaThis = document.getElementById('areaThis')
+    var areaList = document.getElementById('areaList')
+    var alert = document.getElementById('alert')
+    var input = document.getElementById('input')
+    var reset = document.getElementById('reset')
+    //---
+
+    var IsPersonAmount = false;
+    var personAmount = 0;
+    var scoreMax = 0;
+    var scoreMin = 0;
+    var score = [];
+    let personMax = ''
+    let personMin = ''
+
+    const resetProgram = () => {
+        window.location.reload()
+    }
+
+    const showList = () => {
+        title.innerText = `โปรดกรอกคะแนนนักศึกษาคนที่ ${score.length + 1} แล้ว Enter`
+        areaList.innerHTML = ''
+        score.map((item, idx) => {  //วน loop แสดงรายการ person ใน Array
+            let id = idx + 1
+            let star = ''
+            for (let index = 0; index < item; index++) {    //วน loop แสดง *
+                star += '*';
+            }
+            areaList.innerHTML += `<h5>Person${id < 10 ? '0' + id : id} : ${item} Points &nbsp;&nbsp;&nbsp;&nbsp;${star}</h5>`  //แสดงรายการ person นั้นๆ
+        })
+    }
+
+    const showAmount = () => {
+        scoreMax = Math.max(...score);  //หาค่าที่มากที่สุด
+        scoreMin = Math.min(...score);  //หาค่าที่น้อยที่สุด
+
+        score.map((items, idx) => {     //หาตำแหน่งของ person ที่มีคะแนนมากที่สุดและน้อยที่สุดใน Array
+            let id = idx + 1
+            if (items == scoreMax) {
+                personMax += `Person${id < 10 ? '0' + id : id} `
+            }
+            if (items == scoreMin) {
+                personMin += `Person${id < 10 ? '0' + id : id} `
+            }
+        })
+
+        areaList.innerHTML += `<h5>Max Person = = > ${personMax}</h5>`  //แสดงรายชื่อ person ที่มีคะแนนมากที่สุด
+        areaList.innerHTML += `<h5>Min Person = = > ${personMin}</h5>`  //แสดงรายชื่อ person ที่มีคะแนนน้อยที่สุด
+    }
+
+    const actionAlert = () => {
+        alert.style.display = 'none'    //ซ่อนการแจ้งเตือน
+    }
+
+    // Main (หากมีการ enter จะเรียกใช้คำสั่งต่อไปนี้)
+    $('#input').keyup(function (e) {
+        if (e.keyCode == 13) {
+            if ($(this).val() !== '') {             //ตรวจสอบค่าว่าง
+                if (parseInt($(this).val())) {      //ตรวจสอบค่าที่ป้อนว่าเป็นตัวเลขหรือไม่ ถ้าใช่จะเรียกใช้ฟังก์ชั่น แต่ถ้าไม่จะแสดงการแจ้งเตือน
+                    var InputNumber = parseInt($(this).val())
+
+                    if (IsPersonAmount) {           //ตรวจสอบว่ามีการรับค่าจำนวน person แล้วหรือยัง ถ้ามีแล้วการป้อนค่าถัดไปจะถูกเก็บไว้ใน array แต่ถ้าไม่มีการป้อนค่าดังกล่าวจะถูกกำหนดให้เป็นจำนวน person
+                        score.push(InputNumber)     //เก็บค่าที่ป้อนไว้ใน array
+                        showList()                  //เรียกใช้ฟังก์ชั่นแสดงรายการ
+                        input.value = '';
+
+                        if (score.length >= personAmount) {     //ตรวจสอบว่าจำนวนของ array มีค่ามากกว่าหรือเท่ากับจำนวนของ person แล้วหรือยัง ถ้าใช่จะเรียกใช้ฟังก์ชั่นเพื่อแสดงการสรุปผล
+                            input.style.display = 'none'
+                            title.style.display = 'none'
+                            showAmount()            //ฟังก์ชั่นแสดงการสรุปผล
+                            reset.style.display = ''
+                        }
+
+                    } else {
+                        personAmount = InputNumber;
+                        IsPersonAmount = true;
+                        areaThis.innerHTML = `<h5>Input Number : ${personAmount} </h5>`
+                        title.innerText = `โปรดกรอกคะแนนนักศึกษาคนที่ 1 แล้ว Enter`
+                        input.value = '';
+                    }
+                } else {
+                    alert.style.display = ''    //แสดงการแจ้งเตือน
+                }
+            } else {
+                alert.style.display = ''        //แสดงการแจ้งเตือน
+            }
+        }
+    });
+
+</script>
+
+</html>

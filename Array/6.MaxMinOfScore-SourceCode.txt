@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab1</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+</head>
+<style>
+    * {
+        font-family: 'Prompt', sans-serif;
+    }
+
+    .title {
+        padding: 10px;
+        background-color: antiquewhite;
+    }
+</style>
+
+<body>
+    <div id="section-code" class="container">
+        <div class="mt-3 ">
+            <h5 class="title"> 6. ให้เขียนโปรแกรมรับคะแนนของนักศึกษา n คน (คะแนนเต็ม 10 คะแนน)
+                หลังจากนันให้แสดงผล โดยให้แสดงจํานวน * ออกมาตามจํานวนคะแนน
+                หลังจากนั้นให้บอกว่าคนใดได้คะแนนมากสุดและคนใดได้คะแนนน้อยสุด
+            </h5>
+        </div>
+        <div class="row mt-5">
+            <div id="areaThis"></div>
+            <div id="areaList"></div>
+            <h5 id="title">โปรดป้อนจำนวนนักศึกษา จากนั้น Enter</h5>
+
+            <div class="col-md-12">
+                <input id="input" autocomplete="off" class="form-control" onkeyup="actionAlert()" type="text">
+            </div>
+
+            <div>
+                <button id="reset" class="btn btn-primary mt-3" style="display: none;"
+                    onclick="resetProgram()">เริ่มใหม่</button>
+            </div>
+
+            <div>
+                <div class="alert alert-danger mt-3" style="display: none;" id="alert" role="alert">
+                    โปรดป้อนตัวเลขจำนวนเต็ม
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    var title = document.getElementById('title')
+    var areaThis = document.getElementById('areaThis')
+    var areaList = document.getElementById('areaList')
+    var alert = document.getElementById('alert')
+    var input = document.getElementById('input')
+    var reset = document.getElementById('reset')
+    //---
+
+    var IsPersonAmount = false;
+    var personAmount = 0;
+    var scoreMax = 0;
+    var scoreMin = 0;
+    var score = [];
+    let personMax = ''
+    let personMin = ''
+
+    const resetProgram = () => {
+        window.location.reload()
+    }
+
+    const showList = () => {
+        title.innerText = `โปรดกรอกคะแนนนักศึกษาคนที่ ${score.length + 1} แล้ว Enter`
+        areaList.innerHTML = ''
+        score.map((item, idx) => { 
+            let id = idx + 1
+            let star = ''
+            for (let index = 0; index < item; index++) {    //วน loop แสดง *
+                star += '*';
+            }
+            areaList.innerHTML += `<h5>Person${id < 10 ? '0' + id : id} : ${item} Points &nbsp;&nbsp;&nbsp;&nbsp;${star}</h5>` 
+        })
+    }
+
+    const showAmount = () => {
+        scoreMax = Math.max(...score); 
+        scoreMin = Math.min(...score); 
+
+        score.map((items, idx) => {  
+            let id = idx + 1
+            if (items == scoreMax) {
+                personMax += `Person${id < 10 ? '0' + id : id} `
+            }
+            if (items == scoreMin) {
+                personMin += `Person${id < 10 ? '0' + id : id} `
+            }
+        })
+
+        areaList.innerHTML += `<h5>Max Person = = > ${personMax}</h5>` 
+        areaList.innerHTML += `<h5>Min Person = = > ${personMin}</h5>` 
+    }
+
+    const actionAlert = () => {
+        alert.style.display = 'none'  
+    }
+
+    $('#input').keyup(function (e) {
+        if (e.keyCode == 13) {
+            if ($(this).val() !== '') {            
+                if (parseInt($(this).val())) {      
+                    var InputNumber = parseInt($(this).val())
+
+                    if (IsPersonAmount) {           
+                        score.push(InputNumber)    
+                        showList()                  
+                        input.value = '';
+
+                        if (score.length >= personAmount) {     
+                            input.style.display = 'none'
+                            title.style.display = 'none'
+                            showAmount()           
+                            reset.style.display = ''
+                        }
+
+                    } else {
+                        personAmount = InputNumber;
+                        IsPersonAmount = true;
+                        areaThis.innerHTML = `<h5>Input Number : ${personAmount} </h5>`
+                        title.innerText = `โปรดกรอกคะแนนนักศึกษาคนที่ 1 แล้ว Enter`
+                        input.value = '';
+                    }
+                } else {
+                    alert.style.display = ''   
+                }
+            } else {
+                alert.style.display = ''    
+            }
+        }
+    });
+
+</script>
+
+</html>

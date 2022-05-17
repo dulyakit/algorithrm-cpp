@@ -1,0 +1,47 @@
+
+#include <stack>
+#include <iostream>
+using namespace std;
+
+int CheckBalance(string input)
+{
+	stack<char> temp;
+	for (int i = 0; i < input.length(); i++)
+	{
+		if (temp.empty())			
+		{
+			temp.push(input[i]);
+
+			if (input[i] == '}' || input[i] == ']' || input[i] == ')') {
+				return 2;
+			}
+		}
+ 		else if ((temp.top() == '{' && input[i] == '}') || (temp.top() == '[' && input[i] == ']') || (temp.top() == '(' && input[i] == ')')) {
+			temp.pop();			
+		}
+		else
+		{
+			temp.push(input[i]);	
+		}
+	}
+	if (temp.empty())
+	{
+		return 1;
+	}
+}
+
+int main()
+{
+	string input;
+	cout << "Input Expression String == ";
+	cin >> input;
+
+	if (CheckBalance(input) == 1)						
+		cout << "Checked Balance Symbols is TRUE";
+	else if (CheckBalance(input) == 0)					
+		cout << "Checked Balance Symbols is FALSE";
+	else												
+		cout << "Checked Balance Symbols is ERROR";	
+		
+	return 0;
+}
